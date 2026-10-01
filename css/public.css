@@ -1,0 +1,76 @@
+.audioclip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	vertical-align: middle;
+	writing-mode: horizontal-tb;
+	/* Fixed typography so the player looks the same inside any parent tag. */
+	font: normal 500 0.75rem/1.2 ui-sans-serif, system-ui, sans-serif;
+	letter-spacing: normal;
+	text-transform: none;
+	text-decoration: none;
+	text-indent: 0;
+}
+
+.audioclip_panel {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.audioclip_panel[hidden] {
+	display: none;
+}
+
+.audioclip button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 1.55rem;
+	padding: 0.2rem 0.5rem;
+	border: 1px solid #d1d7dc;
+	border-radius: 0.25rem;
+	background-color: #fff;
+	color: #3e4143;
+	font: inherit;
+	letter-spacing: inherit;
+	text-transform: inherit;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.audioclip button:hover,
+.audioclip button:focus-visible {
+	border-color: #9da3a7;
+	background-color: #f7f9fa;
+	color: #1c1d1f;
+}
+
+.audioclip button[aria-pressed="true"] {
+	border-color: #1c1d1f;
+	background-color: #1c1d1f;
+	color: #fff;
+}
+
+.audioclip .audioclip_play {
+	background-image: linear-gradient(to right, #ffe98a var(--audioclip-progress, 0%), transparent var(--audioclip-progress, 0%));
+}
+
+.audioclip button[disabled] {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.audioclip .audioclip_icon {
+	width: 0.875rem;
+	height: 0.875rem;
+}
+
+.audioclip .audioclip_icon_pause,
+.audioclip[data-audioclip-playing="true"] .audioclip_icon_play {
+	display: none;
+}
+
+.audioclip[data-audioclip-playing="true"] .audioclip_icon_pause {
+	display: block;
+}
