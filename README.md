@@ -24,6 +24,7 @@ An invalid `src` (not `https`, not `.mp3`, empty) renders nothing.
 - The `Audio` object is created on the first click: a page with many players downloads nothing until a sound is requested.
 - Only one sound plays at a time.
 - The play button fills yellow as the sound progresses.
+- A spinner replaces the play icon while the MP3 is not yet streamable (first load, speed change, stall).
 - The player keeps its own font and size inside any parent tag (headings, `strong`, `code`).
 
 No library, no build step. Assets are enqueued only on pages that contain the shortcode.

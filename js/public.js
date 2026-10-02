@@ -65,7 +65,16 @@
 			root.setAttribute('data-audioclip-playing', String(isPlaying));
 		}
 
+		function showLoading() {
+			root.setAttribute('data-audioclip-loading', 'true');
+		}
+
+		function hideLoading() {
+			root.setAttribute('data-audioclip-loading', 'false');
+		}
+
 		function handleError() {
+			hideLoading();
 			root.setAttribute('data-audioclip-error', 'true');
 			playButton.disabled = true;
 			playButton.setAttribute('aria-label', 'Audio indisponible');
@@ -84,6 +93,10 @@
 			audio.addEventListener('pause', syncPlayButton);
 			audio.addEventListener('ended', resetProgress);
 			audio.addEventListener('error', handleError);
+			audio.addEventListener('waiting', showLoading);
+			audio.addEventListener('playing', hideLoading);
+			audio.addEventListener('pause', hideLoading);
+			audio.addEventListener('ended', hideLoading);
 
 			return audio;
 		}
@@ -99,6 +112,11 @@
 				element.currentTime = 0;
 			}
 			element.playbackRate = rate;
+
+			const hasEnoughData = element.readyState >= element.HAVE_FUTURE_DATA;
+			if (! hasEnoughData) {
+				showLoading();
+			}
 
 			const playPromise = element.play();
 			playPromise.catch(function (error) {

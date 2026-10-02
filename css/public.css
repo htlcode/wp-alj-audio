@@ -74,3 +74,29 @@
 .audioclip[data-audioclip-playing="true"] .audioclip_icon_pause {
 	display: block;
 }
+
+.audioclip[data-audioclip-loading="true"] .audioclip_play .audioclip_icon {
+	display: none;
+}
+
+.audioclip[data-audioclip-loading="true"] .audioclip_play::after {
+	content: "";
+	width: 0.875rem;
+	height: 0.875rem;
+	border: 2px solid #d1d7dc;
+	border-top-color: #1c1d1f;
+	border-radius: 50%;
+	animation: audioclip-spin 0.7s linear infinite;
+}
+
+@keyframes audioclip-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.audioclip[data-audioclip-loading="true"] .audioclip_play::after {
+		animation-duration: 2s;
+	}
+}
