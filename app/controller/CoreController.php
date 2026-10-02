@@ -61,7 +61,8 @@ class CoreController
         $parameters = shortcode_atts($defaultAttributes, $attributes);
 
         $allowedProtocols = array('https');
-        $sourceUrl = esc_url_raw($parameters['src'], $allowedProtocols);
+        $source = $parameters['src'];
+        $sourceUrl = esc_url_raw($source, $allowedProtocols);
         $lowerSourceUrl = strtolower($sourceUrl);
         $hasMp3Extension = str_ends_with($lowerSourceUrl, self::SOURCE_EXTENSION);
         if (! $hasMp3Extension) {
@@ -73,7 +74,8 @@ class CoreController
         wp_enqueue_style($handle);
 
         $safeSourceUrl = esc_url($sourceUrl);
-        $safeLabel = esc_attr($parameters['label']);
+        $label = $parameters['label'];
+        $safeLabel = esc_attr($label);
         $speakerIcon = self::ICON_SPEAKER;
         $playIcon = self::ICON_PLAY;
         $pauseIcon = self::ICON_PAUSE;
@@ -85,8 +87,11 @@ class CoreController
             <button type="button" class="audioclip_toggle" aria-label="$safeLabel" title="$safeLabel" aria-expanded="false">$speakerIcon</button>
             <span class="audioclip_panel" hidden>
                 <button type="button" class="audioclip_play" aria-label="Lecture">$playIcon$pauseIcon</button>
-                <button type="button" class="audioclip_speed" data-audioclip-rate="$slowRate" aria-pressed="false">Lent</button>
-                <button type="button" class="audioclip_speed" data-audioclip-rate="$normalRate" aria-pressed="true">Normal</button>
+                <button type="button" class="audioclip_speed" role="switch" aria-label="Lecture lente" aria-checked="false" data-audioclip-slow-rate="$slowRate" data-audioclip-normal-rate="$normalRate">
+                    <span class="audioclip_speed_label audioclip_speed_normal" aria-hidden="true">Normal</span>
+                    <span class="audioclip_speed_track" aria-hidden="true"><span class="audioclip_speed_thumb"></span></span>
+                    <span class="audioclip_speed_label audioclip_speed_slow" aria-hidden="true">Lent</span>
+                </button>
             </span>
         </span>
         HTML;

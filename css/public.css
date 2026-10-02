@@ -1,8 +1,12 @@
 .audioclip {
 	display: inline-flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.35rem;
+	max-width: 100%;
 	vertical-align: middle;
+	white-space: normal;
+	text-align: left;
 	writing-mode: horizontal-tb;
 	/* Fixed typography so the player looks the same inside any parent tag. */
 	font: normal 500 0.75rem/1.2 ui-sans-serif, system-ui, sans-serif;
@@ -46,10 +50,66 @@
 	color: #1c1d1f;
 }
 
-.audioclip button[aria-pressed="true"] {
+.audioclip button:focus-visible {
+	outline: 2px solid #1c1d1f;
+	outline-offset: 3px;
+}
+
+.audioclip .audioclip_speed {
+	gap: 0.4rem;
+	border-color: transparent;
+	background-color: transparent;
+	touch-action: manipulation;
+}
+
+.audioclip_speed_track {
+	display: inline-flex;
+	align-items: center;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	width: 2.25rem;
+	height: 1.25rem;
+	padding: 2px;
+	border: 1px solid #70777c;
+	border-radius: 1rem;
+	background-color: #e7ebed;
+	transition: background-color 160ms ease-out;
+}
+
+.audioclip_speed_thumb {
+	width: 0.875rem;
+	height: 0.875rem;
+	border-radius: 50%;
+	background-color: #3e4143;
+	transition: transform 160ms ease-out;
+}
+
+.audioclip_speed_normal,
+.audioclip_speed[aria-checked="true"] .audioclip_speed_slow {
+	font-weight: 700;
+}
+
+.audioclip_speed[aria-checked="true"] .audioclip_speed_normal {
+	font-weight: 500;
+}
+
+.audioclip_speed[aria-checked="true"] .audioclip_speed_track {
 	border-color: #1c1d1f;
 	background-color: #1c1d1f;
-	color: #fff;
+}
+
+.audioclip_speed[aria-checked="true"] .audioclip_speed_thumb {
+	background-color: #fff;
+	transform: translateX(1rem);
+}
+
+@media (pointer: coarse) {
+	.audioclip button {
+		min-width: 44px;
+		min-height: 44px;
+		font-size: 0.875rem;
+		touch-action: manipulation;
+	}
 }
 
 .audioclip .audioclip_play {
@@ -96,6 +156,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.audioclip_speed_track,
+	.audioclip_speed_thumb {
+		transition: none;
+	}
+
 	.audioclip[data-audioclip-loading="true"] .audioclip_play::after {
 		animation-duration: 2s;
 	}

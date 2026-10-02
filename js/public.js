@@ -1,9 +1,4 @@
-/**
- * [audioclip] inline MP3 player.
- *
- * The Audio object is created on the first click, so a page with many players
- * downloads nothing until the visitor asks for a sound. Only one sound plays at a time.
- */
+// Audio loads on demand; only one player can play at a time.
 (function () {
 	'use strict';
 
@@ -14,12 +9,14 @@
 		const toggleButton = root.querySelector('.audioclip_toggle');
 		const panel = root.querySelector('.audioclip_panel');
 		const playButton = root.querySelector('.audioclip_play');
-		const speedButtons = root.querySelectorAll('.audioclip_speed');
-		const initialSpeedButton = root.querySelector('.audioclip_speed[aria-pressed="true"]');
-		const initialRate = initialSpeedButton.getAttribute('data-audioclip-rate');
+		const speedToggle = root.querySelector('.audioclip_speed');
+		const normalRateValue = speedToggle.getAttribute('data-audioclip-normal-rate');
+		const slowRateValue = speedToggle.getAttribute('data-audioclip-slow-rate');
+		const normalRate = parseFloat(normalRateValue);
+		const slowRate = parseFloat(slowRateValue);
 
 		let audio = null;
-		let rate = parseFloat(initialRate);
+		let rate = normalRate;
 		let isOpen = false;
 		let progressFrame = null;
 
@@ -27,10 +24,13 @@
 
 		function updateProgress() {
 			let ratio = 0;
-			if (audio !== null && audio.duration > 0) {
-				ratio = audio.currentTime / audio.duration;
+			if (audio !== null) {
+				if (audio.duration > 0) {
+					ratio = audio.currentTime / audio.duration;
+				}
 			}
-			const percent = Math.min(ratio * 100, 100);
+			const progressPercent = ratio * 100;
+			const percent = Math.min(progressPercent, 100);
 			const progressValue = percent + '%';
 			root.style.setProperty('--audioclip-progress', progressValue);
 		}
@@ -55,14 +55,23 @@
 			root.style.setProperty('--audioclip-progress', '0%');
 		}
 
+		function isAudioPlaying() {
+			if (audio === null) {
+				return false;
+			}
+			const isPlaying = audio.paused === false;
+			return isPlaying;
+		}
+
 		function syncPlayButton() {
-			const isPlaying = audio !== null && !audio.paused;
+			const isPlaying = isAudioPlaying();
 			let label = 'Lecture';
 			if (isPlaying) {
 				label = 'Pause';
 			}
 			playButton.setAttribute('aria-label', label);
-			root.setAttribute('data-audioclip-playing', String(isPlaying));
+			const playingValue = String(isPlaying);
+			root.setAttribute('data-audioclip-playing', playingValue);
 		}
 
 		function showLoading() {
@@ -102,8 +111,10 @@
 		}
 
 		function play(fromStart) {
-			if (activePlayer !== null && activePlayer !== player) {
-				activePlayer.stop();
+			if (activePlayer !== null) {
+				if (activePlayer !== player) {
+					activePlayer.stop();
+				}
 			}
 			activePlayer = player;
 
@@ -129,7 +140,8 @@
 		function setOpen(open) {
 			isOpen = open;
 			panel.hidden = !open;
-			toggleButton.setAttribute('aria-expanded', String(open));
+			const expandedValue = String(open);
+			toggleButton.setAttribute('aria-expanded', expandedValue);
 		}
 
 		function stop() {
@@ -150,7 +162,7 @@
 		});
 
 		playButton.addEventListener('click', function () {
-			const isPlaying = audio !== null && !audio.paused;
+			const isPlaying = isAudioPlaying();
 			if (isPlaying) {
 				audio.pause();
 				return;
@@ -159,16 +171,15 @@
 			play(false);
 		});
 
-		speedButtons.forEach(function (speedButton) {
-			speedButton.addEventListener('click', function () {
-				const selectedRate = speedButton.getAttribute('data-audioclip-rate');
-				rate = parseFloat(selectedRate);
-				speedButtons.forEach(function (otherButton) {
-					const isSelected = otherButton === speedButton;
-					otherButton.setAttribute('aria-pressed', String(isSelected));
-				});
-				play(true);
-			});
+		speedToggle.addEventListener('click', function () {
+			const isSlow = rate === normalRate;
+			rate = normalRate;
+			if (isSlow) {
+				rate = slowRate;
+			}
+			const checkedValue = String(isSlow);
+			speedToggle.setAttribute('aria-checked', checkedValue);
+			play(true);
 		});
 
 		syncPlayButton();
