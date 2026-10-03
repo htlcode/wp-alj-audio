@@ -31,7 +31,7 @@
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
-	min-height: 2rem;
+	min-height: 1.625rem;
 	padding: 0.2rem 0.5rem;
 	border: 1px solid #d1d7dc;
 	border-radius: 0.25rem;
@@ -60,7 +60,7 @@
 	display: inline-grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 0;
-	padding: 3px;
+	padding: 2px;
 	border-color: #d1d7dc;
 	border-radius: 0.4rem;
 	background-color: #e7ebed;
@@ -72,7 +72,7 @@
 	align-items: center;
 	justify-content: center;
 	align-self: stretch;
-	padding: 0.2rem 0.5rem;
+	padding: 0.1rem 0.4rem;
 	border: 1px solid transparent;
 	border-radius: 0.2rem;
 	font-weight: 500;
@@ -91,7 +91,6 @@
 	.audioclip button {
 		min-width: 44px;
 		min-height: 44px;
-		font-size: 0.875rem;
 		touch-action: manipulation;
 	}
 }
