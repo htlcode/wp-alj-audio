@@ -30,7 +30,8 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 1.55rem;
+	box-sizing: border-box;
+	min-height: 2rem;
 	padding: 0.2rem 0.5rem;
 	border: 1px solid #d1d7dc;
 	border-radius: 0.25rem;
@@ -56,51 +57,34 @@
 }
 
 .audioclip .audioclip_speed {
-	gap: 0.4rem;
-	border-color: transparent;
-	background-color: transparent;
+	display: inline-grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0;
+	padding: 3px;
+	border-color: #d1d7dc;
+	border-radius: 0.4rem;
+	background-color: #e7ebed;
 	touch-action: manipulation;
 }
 
-.audioclip_speed_track {
+.audioclip_speed_label {
 	display: inline-flex;
 	align-items: center;
-	flex: 0 0 auto;
-	box-sizing: border-box;
-	width: 2.25rem;
-	height: 1.25rem;
-	padding: 2px;
-	border: 1px solid #70777c;
-	border-radius: 1rem;
-	background-color: #e7ebed;
-	transition: background-color 160ms ease-out;
-}
-
-.audioclip_speed_thumb {
-	width: 0.875rem;
-	height: 0.875rem;
-	border-radius: 50%;
-	background-color: #3e4143;
-	transition: transform 160ms ease-out;
-}
-
-.audioclip_speed_normal,
-.audioclip_speed[aria-checked="true"] .audioclip_speed_slow {
-	font-weight: 700;
-}
-
-.audioclip_speed[aria-checked="true"] .audioclip_speed_normal {
+	justify-content: center;
+	align-self: stretch;
+	padding: 0.2rem 0.5rem;
+	border: 1px solid transparent;
+	border-radius: 0.2rem;
 	font-weight: 500;
+	transition: background-color 160ms ease-out, border-color 160ms ease-out;
 }
 
-.audioclip_speed[aria-checked="true"] .audioclip_speed_track {
-	border-color: #1c1d1f;
-	background-color: #1c1d1f;
-}
-
-.audioclip_speed[aria-checked="true"] .audioclip_speed_thumb {
+.audioclip_speed[aria-checked="false"] .audioclip_speed_normal,
+.audioclip_speed[aria-checked="true"] .audioclip_speed_slow {
+	border-color: #70777c;
 	background-color: #fff;
-	transform: translateX(1rem);
+	color: #1c1d1f;
+	font-weight: 700;
 }
 
 @media (pointer: coarse) {
@@ -156,8 +140,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.audioclip_speed_track,
-	.audioclip_speed_thumb {
+	.audioclip_speed_label {
 		transition: none;
 	}
 

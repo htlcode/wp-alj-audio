@@ -19,7 +19,7 @@ An invalid `src` (not `https`, not `.mp3`, empty) renders nothing.
 ## Behavior
 
 - Clicking the speaker opens an inline panel and starts playback from the beginning.
-- The panel has play/pause and a single `Normal` (1x) / `Lent` (0.7x) switch, initially normal. Changing speed restarts the sound.
+- The panel has play/pause and a single segmented `Normal` (1x) / `Lent` (0.7x) toggle, with the active option framed and initially normal. Changing speed restarts the sound.
 - The speed switch supports touch, Enter and Space, with its slow state exposed through `aria-checked`. Touch controls have a minimum 44px target.
 - Pitch is preserved at every speed (`preservesPitch`).
 - The `Audio` object is created on the first click: a page with many players downloads nothing until a sound is requested.

@@ -89,7 +89,6 @@ class CoreController
                 <button type="button" class="audioclip_play" aria-label="Lecture">$playIcon$pauseIcon</button>
                 <button type="button" class="audioclip_speed" role="switch" aria-label="Lecture lente" aria-checked="false" data-audioclip-slow-rate="$slowRate" data-audioclip-normal-rate="$normalRate">
                     <span class="audioclip_speed_label audioclip_speed_normal" aria-hidden="true">Normal</span>
-                    <span class="audioclip_speed_track" aria-hidden="true"><span class="audioclip_speed_thumb"></span></span>
                     <span class="audioclip_speed_label audioclip_speed_slow" aria-hidden="true">Lent</span>
                 </button>
             </span>
