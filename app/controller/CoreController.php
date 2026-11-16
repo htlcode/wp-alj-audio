@@ -5,6 +5,7 @@ namespace WpAudioClip;
 class CoreController
 {
     private const SHORTCODE_TAG = 'audioclip';
+    private const LIGHT_SHORTCODE_TAG = 'audioclip-light';
     private const ASSET_HANDLE = 'wp-audio-clip';
     private const SOURCE_EXTENSION = '.mp3';
     private const SLOW_RATE = '0.7';
@@ -12,6 +13,8 @@ class CoreController
     private const ICON_SPEAKER = '<svg class="audioclip_icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg>';
     private const ICON_PLAY = '<svg class="audioclip_icon audioclip_icon_play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>';
     private const ICON_PAUSE = '<svg class="audioclip_icon audioclip_icon_pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
+
+    private const ICON_STOP = '<svg class="audioclip_icon audioclip_icon_pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 6h12v12H6z"/></svg>';
 
     private static ?CoreController $instance = null;
 
@@ -29,6 +32,8 @@ class CoreController
         $shortcodeTag = self::SHORTCODE_TAG;
         $shortcodeCallback = array($this, 'render_audio');
         add_shortcode($shortcodeTag, $shortcodeCallback);
+        $lightTag = self::LIGHT_SHORTCODE_TAG;
+        add_shortcode($lightTag, $shortcodeCallback);
 
         $assetsCallback = array($this, 'register_assets');
         add_action('wp_enqueue_scripts', $assetsCallback);
@@ -52,7 +57,7 @@ class CoreController
         wp_register_style($handle, $styleUrl, $dependencies, $styleVersion);
     }
 
-    public function render_audio($attributes): string
+    public function render_audio($attributes, $content = null, string $shortcodeTag = self::SHORTCODE_TAG): string
     {
         $defaultAttributes = array(
             'src' => '',
@@ -65,7 +70,7 @@ class CoreController
         $sourceUrl = esc_url_raw($source, $allowedProtocols);
         $lowerSourceUrl = strtolower($sourceUrl);
         $hasMp3Extension = str_ends_with($lowerSourceUrl, self::SOURCE_EXTENSION);
-        if (! $hasMp3Extension) {
+        if ($hasMp3Extension === false) {
             return '';
         }
 
@@ -77,6 +82,22 @@ class CoreController
         $label = $parameters['label'];
         $safeLabel = esc_attr($label);
         $speakerIcon = self::ICON_SPEAKER;
+        if ($shortcodeTag === self::LIGHT_SHORTCODE_TAG) {
+            $playIcon = self::ICON_PLAY;
+            $stopIcon = self::ICON_STOP;
+            $markup = <<<HTML
+            <span class="audioclip audioclip--light" data-audioclip-mode="light" data-audioclip-src="$safeSourceUrl" itemscope itemtype="https://schema.org/AudioObject">
+                <meta itemprop="name" content="$safeLabel">
+                <meta itemprop="contentUrl" content="$safeSourceUrl">
+                <meta itemprop="encodingFormat" content="audio/mpeg">
+                <meta itemprop="inLanguage" content="ja">
+                <audio preload="none" src="$safeSourceUrl" hidden aria-label="$safeLabel"></audio>
+                <span class="audioclip_identifier" aria-hidden="true">$speakerIcon</span>
+                <button type="button" class="audioclip_play" data-audioclip-label="$safeLabel" aria-label="$safeLabel" title="$safeLabel" aria-pressed="false">$playIcon$stopIcon</button>
+            </span>
+            HTML;
+            return $markup;
+        }
         $playIcon = self::ICON_PLAY;
         $pauseIcon = self::ICON_PAUSE;
         $slowRate = self::SLOW_RATE;

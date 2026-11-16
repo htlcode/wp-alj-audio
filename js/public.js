@@ -10,10 +10,21 @@
 		const panel = root.querySelector('.audioclip_panel');
 		const playButton = root.querySelector('.audioclip_play');
 		const speedToggle = root.querySelector('.audioclip_speed');
-		const normalRateValue = speedToggle.getAttribute('data-audioclip-normal-rate');
-		const slowRateValue = speedToggle.getAttribute('data-audioclip-slow-rate');
-		const normalRate = parseFloat(normalRateValue);
-		const slowRate = parseFloat(slowRateValue);
+		const mode = root.getAttribute('data-audioclip-mode');
+        let isLight = false;
+        if (mode === 'light') {
+            isLight = true;
+        } else {
+            isLight = false;
+        }
+        let normalRate = 1;
+        let slowRate = 1;
+        if (isLight === false) {
+            const normalRateValue = speedToggle.getAttribute('data-audioclip-normal-rate');
+            const slowRateValue = speedToggle.getAttribute('data-audioclip-slow-rate');
+            normalRate = parseFloat(normalRateValue);
+            slowRate = parseFloat(slowRateValue);
+        }
 
 		let audio = null;
 		let rate = normalRate;
@@ -66,9 +77,19 @@
 		function syncPlayButton() {
 			const isPlaying = isAudioPlaying();
 			let label = 'Lecture';
-			if (isPlaying) {
-				label = 'Pause';
-			}
+            if (isLight === true) {
+                label = playButton.getAttribute('data-audioclip-label');
+                if (isPlaying === true) {
+                    label = 'Arrêter';
+                }
+                const pressedValue = String(isPlaying);
+                playButton.setAttribute('aria-pressed', pressedValue);
+                playButton.setAttribute('title', label);
+            } else {
+                if (isPlaying === true) {
+                    label = 'Pause';
+                }
+            }
 			playButton.setAttribute('aria-label', label);
 			const playingValue = String(isPlaying);
 			root.setAttribute('data-audioclip-playing', playingValue);
@@ -94,13 +115,19 @@
 				return audio;
 			}
 
-			audio = new Audio(source);
+            audio = root.querySelector('audio');
+            if (audio === null) {
+                audio = new Audio(source);
+            }
 			audio.preservesPitch = true;
 			audio.webkitPreservesPitch = true;
 			audio.addEventListener('play', syncPlayButton);
-			audio.addEventListener('play', startProgress);
+            if (isLight === false) {
+                audio.addEventListener('play', startProgress);
+            }
 			audio.addEventListener('pause', syncPlayButton);
 			audio.addEventListener('ended', resetProgress);
+            audio.addEventListener('ended', syncPlayButton);
 			audio.addEventListener('error', handleError);
 			audio.addEventListener('waiting', showLoading);
 			audio.addEventListener('playing', hideLoading);
@@ -138,6 +165,9 @@
 		}
 
 		function setOpen(open) {
+            if (isLight === true) {
+                return;
+            }
 			isOpen = open;
 			panel.hidden = !open;
 			const expandedValue = String(open);
@@ -147,10 +177,14 @@
 		function stop() {
 			if (audio !== null) {
 				audio.pause();
+                if (isLight === true) {
+                    audio.currentTime = 0;
+                }
 			}
 			setOpen(false);
 		}
 
+        if (isLight === false) {
 		toggleButton.addEventListener('click', function () {
 			if (isOpen) {
 				stop();
@@ -161,9 +195,19 @@
 			play(true);
 		});
 
+        }
+
 		playButton.addEventListener('click', function () {
 			const isPlaying = isAudioPlaying();
-			if (isPlaying) {
+            if (isLight === true) {
+                if (isPlaying === true) {
+                    stop();
+                } else {
+                    play(true);
+                }
+                return;
+            }
+			if (isPlaying === true) {
 				audio.pause();
 				return;
 			}
@@ -171,6 +215,7 @@
 			play(false);
 		});
 
+        if (isLight === false) {
 		speedToggle.addEventListener('click', function () {
 			const isSlow = rate === normalRate;
 			rate = normalRate;
@@ -181,6 +226,8 @@
 			speedToggle.setAttribute('aria-checked', checkedValue);
 			play(true);
 		});
+
+        }
 
 		syncPlayButton();
 	}

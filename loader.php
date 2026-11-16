@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: WP Audio Clip
-Description: Speaker icon shortcode that opens an inline MP3 player with slow and normal speed
-Version: 1.0
+Description: Inline MP3 players with full controls or a compact play/stop button
+Version: 1.1
 */
 
 use WpAudioClip\CoreController;
