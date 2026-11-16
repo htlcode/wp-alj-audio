@@ -85,7 +85,7 @@ class CoreController
         if ($shortcodeTag === self::LIGHT_SHORTCODE_TAG) {
             $lightLabel = 'Audio — ' . $label;
             $safeLightLabel = esc_attr($lightLabel);
-            $playIcon = self::ICON_PLAY;
+            $playIcon = str_replace('class="audioclip_icon"', 'class="audioclip_icon audioclip_icon_play"', $speakerIcon);
             $stopIcon = self::ICON_STOP;
             $markup = <<<HTML
             <span class="audioclip audioclip--light" data-audioclip-mode="light" data-audioclip-src="$safeSourceUrl" itemscope itemtype="https://schema.org/AudioObject">
