@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Audio Clip
 Description: Inline MP3 players with full controls or a compact play/stop button
-Version: 1.1
+Version: 1.1.1
 */
 
 use WpAudioClip\CoreController;

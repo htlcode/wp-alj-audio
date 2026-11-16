@@ -150,6 +150,7 @@
 
 .audioclip--light .audioclip_play {
     min-width: 1.625rem;
+    gap: 0.3rem;
     padding: 0.25rem 0.45rem;
     border-color: #d1d7dc;
     background-color: #edf0f2;
@@ -166,11 +167,6 @@
     .audioclip--light .audioclip_play {
         min-width: 44px;
     }
-}
-
-.audioclip_identifier {
-    display: inline-flex;
-    color: #656565;
 }
 
 .audioclip audio[hidden] {

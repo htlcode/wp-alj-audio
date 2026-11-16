@@ -80,7 +80,7 @@
             if (isLight === true) {
                 label = playButton.getAttribute('data-audioclip-label');
                 if (isPlaying === true) {
-                    label = 'Arrêter';
+                    label = 'Audio — arrêter';
                 }
                 const pressedValue = String(isPlaying);
                 playButton.setAttribute('aria-pressed', pressedValue);

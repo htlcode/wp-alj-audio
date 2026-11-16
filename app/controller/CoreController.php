@@ -83,6 +83,8 @@ class CoreController
         $safeLabel = esc_attr($label);
         $speakerIcon = self::ICON_SPEAKER;
         if ($shortcodeTag === self::LIGHT_SHORTCODE_TAG) {
+            $lightLabel = 'Audio — ' . $label;
+            $safeLightLabel = esc_attr($lightLabel);
             $playIcon = self::ICON_PLAY;
             $stopIcon = self::ICON_STOP;
             $markup = <<<HTML
@@ -92,8 +94,7 @@ class CoreController
                 <meta itemprop="encodingFormat" content="audio/mpeg">
                 <meta itemprop="inLanguage" content="ja">
                 <audio preload="none" src="$safeSourceUrl" hidden aria-label="$safeLabel"></audio>
-                <span class="audioclip_identifier" aria-hidden="true">$speakerIcon</span>
-                <button type="button" class="audioclip_play" data-audioclip-label="$safeLabel" aria-label="$safeLabel" title="$safeLabel" aria-pressed="false">$playIcon$stopIcon</button>
+                <button type="button" class="audioclip_play" data-audioclip-label="$safeLightLabel" aria-label="$safeLightLabel" title="$safeLightLabel" aria-pressed="false"><span aria-hidden="true">Audio</span>$playIcon$stopIcon</button>
             </span>
             HTML;
             return $markup;
